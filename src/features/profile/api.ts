@@ -32,7 +32,6 @@ interface Pagination {
   totalPages: number;
 }
 
-// Bentuk seragam yang dipakai UI (normalisasi container yang beda-beda).
 export interface PostsPage {
   items: Post[];
   pagination: Pagination;
@@ -40,6 +39,21 @@ export interface PostsPage {
 
 export function getMe() {
   return api.get<MeResponse>("/api/me");
+}
+
+// Update profil (multipart: field yang berubah + `avatar` opsional).
+// ⚠️ `phone` bisa 500 di backend → hanya dikirim kalau memang diubah.
+export interface UpdatedProfile {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  phone: string | null;
+  bio: string | null;
+  avatarUrl: string | null;
+}
+export function updateMe(fd: FormData): Promise<UpdatedProfile> {
+  return api.patch<UpdatedProfile>("/api/me", fd);
 }
 
 // Gallery: post milik sendiri → data.items[]

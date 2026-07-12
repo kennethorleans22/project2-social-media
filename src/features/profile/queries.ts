@@ -1,9 +1,38 @@
 // src/features/profile/queries.ts
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { getMe, getMyPosts, getSavedPosts } from "./api";
+import {
+  useQuery,
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useAppDispatch } from "@/store";
+import { setUser } from "@/store/authSlice";
+import { getMe, getMyPosts, getSavedPosts, updateMe } from "./api";
 
 export function useMe() {
   return useQuery({ queryKey: ["me"], queryFn: getMe });
+}
+
+// Update profil → sinkron ke Redux (navbar) + refetch /me.
+export function useUpdateMe() {
+  const qc = useQueryClient();
+  const dispatch = useAppDispatch();
+  return useMutation({
+    mutationFn: (fd: FormData) => updateMe(fd),
+    onSuccess: (p) => {
+      dispatch(
+        setUser({
+          id: p.id,
+          name: p.name,
+          username: p.username,
+          email: p.email,
+          phone: p.phone,
+          avatarUrl: p.avatarUrl,
+        })
+      );
+      qc.invalidateQueries({ queryKey: ["me"] });
+    },
+  });
 }
 
 function getNextPage(lastPage: {

@@ -9,15 +9,16 @@ import { Icon } from "@/components/shared/icon";
 export function BottomNav() {
   const pathname = usePathname();
 
-  // Halaman Add Post tampil tanpa bottom nav.
-  if (pathname.startsWith("/create")) return null;
+  // Add Post & Edit Profile tampil tanpa bottom nav.
+  if (pathname.startsWith("/create") || pathname.startsWith("/me/edit")) {
+    return null;
+  }
 
   const isProfile = pathname.startsWith("/me");
   const isHome = !isProfile;
 
   return (
     <nav className="fixed bottom-4 left-1/2 z-50 flex h-16 w-86.25 -translate-x-1/2 items-center justify-center gap-11.25 rounded-full border border-neutral-900 bg-neutral-950 backdrop-blur-md lg:bottom-8 lg:h-20 lg:w-90">
-      {/* Home → /feed */}
       <Link
         href="/feed"
         className="flex w-23.5 flex-col items-center gap-0.5 lg:gap-1"
@@ -36,7 +37,6 @@ export function BottomNav() {
         </span>
       </Link>
 
-      {/* Add → /create */}
       <Link
         href="/create"
         aria-label="Create post"
@@ -45,7 +45,6 @@ export function BottomNav() {
         <Icon src="/icons/nav-add.svg" className="h-5.5 w-5.5 lg:h-6 lg:w-6" />
       </Link>
 
-      {/* Profile → /me */}
       <Link
         href="/me"
         className="flex w-23.5 flex-col items-center gap-0.5 lg:gap-1"

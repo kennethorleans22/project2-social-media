@@ -1,10 +1,10 @@
 // src/app/(main)/me/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/shared/icon";
 import { UserAvatar } from "@/components/shared/user-avatar";
@@ -24,8 +24,38 @@ export default function MyProfilePage() {
   const gallery = useMyPosts();
   const saved = useSavedPosts(tab === "saved");
 
+  // Toast "Profile Success Update" (flag di-set oleh halaman Edit Profile).
+  const [showUpdated, setShowUpdated] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      sessionStorage.getItem("sociality_profile_updated") === "1"
+  );
+  useEffect(() => {
+    if (!showUpdated) return;
+    sessionStorage.removeItem("sociality_profile_updated");
+    const t = setTimeout(() => setShowUpdated(false), 4000);
+    return () => clearTimeout(t);
+  }, [showUpdated]);
+
   return (
     <>
+      {/* Toast */}
+      {showUpdated && (
+        <div className="fixed left-5 right-5 top-[86px] z-50 flex items-center gap-2 rounded-lg bg-[#079455] px-3 py-2 lg:left-auto lg:right-8 lg:top-28 lg:w-[291px]">
+          <span className="flex-1 text-body-sm font-semibold text-white">
+            Profile Success Update
+          </span>
+          <button
+            type="button"
+            onClick={() => setShowUpdated(false)}
+            aria-label="Close"
+            className="shrink-0"
+          >
+            <X size={16} className="text-white" />
+          </button>
+        </div>
+      )}
+
       {/* Header MOBILE (khusus /me — navbar global disembunyikan di mobile) */}
       <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-neutral-900 bg-black px-4 lg:hidden">
         <div className="flex items-center gap-2">
