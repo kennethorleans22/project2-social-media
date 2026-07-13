@@ -9,16 +9,27 @@ export default function AuthLayout({
   return (
     <GuestGuard>
       <div className="relative min-h-screen overflow-hidden bg-black">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(75% 95% at 50% 108%, #AC88FF 0%, #7B44D6 30%, #4A1F9E 52%, rgba(0,0,0,0) 78%)",
-            }}
-          />
-        </div>
+        {/* Gradient = GAMBAR export dari Figma (dekoratif, di belakang konten) */}
 
+        {/* HANYA mobile (di bawah md): nempel di bawah, lebar ~414px, center */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/gradient-auth-mobile.png"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute bottom-0 left-1/2 w-[414px] max-w-none -translate-x-1/2 select-none md:hidden"
+        />
+
+        {/* Tablet & desktop (md ke atas): glow besar, 150px dari atas, center */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/gradient-auth-desktop.png"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-[150px] hidden w-[1920px] max-w-none -translate-x-1/2 select-none md:block"
+        />
+
+        {/* Konten (login/register) di atas gradient */}
         <div className="relative flex min-h-screen items-center justify-center px-4 py-10">
           {children}
         </div>
