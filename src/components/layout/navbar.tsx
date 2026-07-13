@@ -21,7 +21,9 @@ export default function Navbar() {
   // Halaman dengan header mobile sendiri → sembunyikan navbar ini di mobile.
   const pathname = usePathname();
   const hideOnMobile =
-    pathname.startsWith("/me") || pathname.startsWith("/create");
+    pathname.startsWith("/me") ||
+    pathname.startsWith("/create") ||
+    pathname.startsWith("/profile");
 
   return (
     <header
@@ -56,7 +58,6 @@ export default function Navbar() {
           </button>
 
           {isAuthed ? (
-            /* ===== After Login: avatar + nama → /me ===== */
             <Link href="/me" className="flex items-center gap-3">
               <UserAvatar
                 src={user?.avatarUrl ?? null}
@@ -69,7 +70,6 @@ export default function Navbar() {
             </Link>
           ) : (
             <>
-              {/* ===== Before Login: tombol (desktop) ===== */}
               <div className="hidden items-center gap-3 lg:flex">
                 <Link
                   href="/login"
@@ -85,7 +85,6 @@ export default function Navbar() {
                 </Link>
               </div>
 
-              {/* ===== Before Login: hamburger (mobile) ===== */}
               <button
                 type="button"
                 className="text-white lg:hidden"
@@ -117,7 +116,6 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* Overlay search mobile */}
       <MobileSearchOverlay
         open={mobileSearchOpen}
         onClose={() => setMobileSearchOpen(false)}
